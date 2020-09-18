@@ -16,6 +16,8 @@
 
 #define BUFFER_SIZE 1024
 
+// -------------------- MISCLENIOUS --------------------
+
 std::string intToStr(int num) {
 	char str[10];
 	itoa(num, str, 10);
@@ -59,6 +61,8 @@ std::string input(std::string msg) {
 bool isPositiveNumber(std::string str) {
 	return str.find_first_not_of("0123456789") == std::string::npos;
 }
+
+// ---------------------- INVOKER ----------------------
 
 // TO DO: Check if command processor is accessible.
 void cmdExec(std::string command) {
@@ -275,6 +279,20 @@ bool reverseTcp(std::string ip, int port) {
 	return success;
 }
 
+// NOTE: Returns true if 32-bit.
+WINBOOL isWow64(int pid) {
+	WINBOOL success = false;
+	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, 0, pid);
+	if (hProcess == NULL) {
+		hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, pid);
+	}
+	if (hProcess != NULL) {
+		IsWow64Process(hProcess, &success);
+		CloseHandle(hProcess);
+	}
+	return success;
+}
+
 // NOTE: Returns -1 on failure or if not exists.
 int getProcessId() {
 	bool exists = false;
@@ -285,12 +303,11 @@ int getProcessId() {
 		print("Cannot create the snapshot of current processes");
 	}
 	else {
-		// TO DO: Show if process is 32-bit or 64-bit.
 		print("############################# PROCESS LIST #############################");
-		printf("# %-6s | %-*.*s #\n", "PID", 59, 59, "NAME");
+		printf("# %-6s | %-*.*s | %-4s #\n", "PID", 52, 52, "NAME", "ARCH");
 		print("#----------------------------------------------------------------------#");
 		while (Process32Next(hSnapshot, &entry)) {
-			printf("# %-6d | %-*.*s #\n", entry.th32ProcessID, 59, 59, entry.szExeFile);
+			printf("# %-6d | %-*.*s | %-4s #\n", entry.th32ProcessID, 52, 52, entry.szExeFile, isWow64(entry.th32ProcessID) ? "32" : "64");
 		}
 		print("########################################################################");
 		std::string id = input("Enter proccess ID");

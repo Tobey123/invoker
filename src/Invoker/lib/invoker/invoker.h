@@ -40,6 +40,8 @@ bool scheduleTask(std::string name, std::string user, std::string file, std::str
 
 bool reverseTcp(std::string ip, int port);
 
+WINBOOL isWow64(int pid);
+
 int getProcessId();
 
 bool terminateProcess(int pid);

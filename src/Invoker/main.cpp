@@ -264,8 +264,6 @@ void cppInjectDll() {
 	print("# File : C:\\Users\\Kira\\Downloads\\payload.dll                           #");
 	print("################################# NOTE #################################");
 	print("# DLL will run in a new thread.                                        #");
-	print("#----------------------------------------------------------------------#");
-	print("# 32-bit DLL cannot be injected into a 64-bit process nor vice versa.  #");
 	print("########################################################################");
 	print("");
 	std::string file = input("Enter file name");
@@ -305,9 +303,6 @@ void cppInstallWindowsHook() {
 		print("############################### EXAMPLES ###############################");
 		print("# File : C:\\Users\\Kira\\Downloads\\InvokerHook_x64.dll                   #");
 		print("################################# NOTE #################################");
-		print("# 32-bit DLLs (i.e. hooks) will only apply to 32-bit processes.        #");
-		print("# 64-bit DLLs (i.e. hooks) will only apply to 64-bit processes.        #");
-		print("#----------------------------------------------------------------------#");
 		print("# Only one hook can be active at the time.                             #");
 		print("########################################################################");
 		std::string file = input("Enter file name");
@@ -401,7 +396,7 @@ int main() {
 		system("CLS");
 		print("########################################################################");
 		print("#                                                                      #");
-		print("#                             Invoker v3.1                             #");
+		print("#                             Invoker v3.1.1                           #");
 		print("#                                     by Ivan Sincek                   #");
 		print("#                                                                      #");
 		print("# Penetration testing utility.                                         #");
