@@ -87,7 +87,7 @@ Additionally, to see if a process is running with administrative privileges chec
 
 ## Generate a Reverse Shell Payload
 
-Find out how to generate a reverse shell payload from my other [project](https://github.com/ivan-sincek/penetration-testing-cheat-sheet#generate-a-reverse-shell-payload-for-windows).
+Find out how to generate a reverse shell payload from my other [project](https://github.com/ivan-sincek/penetration-testing-cheat-sheet#generate-a-reverse-shell-payload-for-windows-os).
 
 ## PowerShell Scripts
 
