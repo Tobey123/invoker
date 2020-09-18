@@ -1,6 +1,18 @@
 #include ".\lib\invoker\invoker.h"
 #include ".\lib\base64\base64.h"
 
+// -----------------------------------------------------
+
+void clear() {
+	system("echo \"Invoker\" 1>nul") == 0 ? system("CLS") : printf("\n");
+}
+
+void pause() {
+	printf("\nPress any key to continue . . ."); getchar();
+}
+
+// -----------------------------------------------------
+
 void systemInvokeCmd() {
 	print("############################### EXAMPLES ###############################");
 	print("# Command: WHOAMI /PRIV                                                #");
@@ -14,7 +26,7 @@ void systemInvokeCmd() {
 }
 
 void systemInvokePs() {
-	system("PowerShell -ExecutionPolicy Unrestricted -NoProfile");
+	psExec();
 }
 
 void msInvokeBoth() {
@@ -389,11 +401,12 @@ void cppReplaceStickyKeys() {
 	replaceStickyKeys();
 }
 
+// -----------------------------------------------------
+
 int main() {
 	SetConsoleTitle("Invoker");
 	std::string choice = "0";
 	do {
-		system("CLS");
 		print("########################################################################");
 		print("#                                                                      #");
 		print("#                             Invoker v3.1.1                           #");
@@ -434,8 +447,7 @@ int main() {
 		if (isPositiveNumber(choice)) {
 			int ch = atoi(choice.c_str());
 			if (ch >= 1 && ch <= 20) {
-				// TO DO: Find the alternative for system("CLS").
-				system("CLS");
+				clear();
 				switch (ch) {
 					case  1: { systemInvokeCmd();           break; }
 					case  2: { systemInvokePs();            break; }
@@ -458,8 +470,8 @@ int main() {
 					case 19: { cppUnquotedServicePaths();   break; }
 					case 20: { cppReplaceStickyKeys();      break; }
 				}
-				print("");
-				system("PAUSE");
+				pause();
+				clear();
 			}
 		}
 	} while (choice != "0");

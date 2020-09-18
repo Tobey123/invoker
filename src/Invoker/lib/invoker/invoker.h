@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <string>
 
+// -----------------------------------------------------
+
 std::string intToStr(int num);
 
 std::string strToLower(std::string str);
@@ -20,25 +22,35 @@ std::string input(std::string msg);
 
 bool isPositiveNumber(std::string str);
 
+// -----------------------------------------------------
+
+bool isCmdAccessible();
+
 void cmdExec(std::string command = "");
 
-void psExec(std::string encoded);
+void psExec(std::string command = "");
+
+// -----------------------------------------------------
 
 bool createFile(std::string file, std::string data = "");
 
-std::string readFile(std::string file);
+bool appendFile(std::string file, std::string data);
 
-bool writeFile(std::string file, std::string data);
+std::string readFile(std::string file);
 
 bool copyFile(std::string original, std::string copy);
 
 bool downloadFile(std::string url, std::string out);
+
+// -----------------------------------------------------
 
 bool editRegKey(PHKEY hKey, std::string subkey, std::string name, std::string data);
 
 bool scheduleTask(std::string name, std::string user, std::string file, std::string args = "");
 
 bool reverseTcp(std::string ip, int port);
+
+// -----------------------------------------------------
 
 WINBOOL isWow64(int pid);
 
@@ -50,11 +62,15 @@ bool runProcess(std::string file, std::string args = "", PHANDLE hToken = NULL);
 
 bool dumpProcessMemory(int pid);
 
+// -----------------------------------------------------
+
 std::string getWebContent(std::string url, int port, std::string method = "GET");
 
 std::string extractPayload(std::string data, std::string element, std::string placeholder);
 
 bool injectBytecode(int pid, std::string bytecode);
+
+// -----------------------------------------------------
 
 bool injectDll(int pid, std::string file);
 
@@ -70,13 +86,19 @@ void hookJob(struct hook* info);
 
 HANDLE createHookThread(struct hook* info);
 
+// -----------------------------------------------------
+
 void enableAccessTokenPrivs();
 
 HANDLE duplicateAccessToken(int pid);
 
+// -----------------------------------------------------
+
 std::string getUnquotedServiceName();
 
 bool manageService(std::string name, int mode);
+
+// -----------------------------------------------------
 
 bool replaceStickyKeys();
 
